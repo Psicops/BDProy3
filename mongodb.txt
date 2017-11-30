@@ -1,0 +1,102 @@
+## Instalar MongoDB
+
+## Abrir consola como Administrador
+## Pegar por lineas
+
+mkdir c:\data\db
+mkdir c:\data\log
+
+## Cerrar consola y abrir una nueva
+## Pegar con comillas
+
+"C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe"
+
+## Dejar la consola abierta, abrir otra cuando la primera muestre "Waiting for connections"
+## Pegar con comillas
+
+"C:\Program Files\MongoDB\Server\3.4\bin\mongo.exe"
+
+## Ya se puede comenzar a utilizar mongo.
+------------------------------------------------
+## Comandos
+## Desde el shell de Mongo
+## Usar tal como se muestra, no se necesita nada mas
+
+show dbs		## Muestra todas las bases de datos existentes en mongodb. No muestra BD vacías.
+
+db				## Muestra la base de datos que está en uso.
+
+use <nombreBD>	## Usa la BD seleccionada, en caso de no existir, la crea automáticamente.
+
+cls 			## Limpia Consola.
+
+db.createUser(	## Crea un usuario para la base de datos.
+	{user: 'dbaproy',	## Nombre del usuario.
+	 pwd: '1234',		## Contraseña.
+	 roles: ['readWrite', dbAdmin']})	## Permisos del Usuario.
+	 
+show collections	## Muestra las colecciones de datos existentes en la BD.
+
+db.<nombreColeccion>.insert({<datos>})	## Inserta datos en la coleccion seleccionada. Si no existe la Coleccion,
+										##	se crea automáticamente.
+										
+db.<nombreColeccion>.insert([{},{}])	## Si se necesita ingresar más de un dato, se debe usar así.
+
+db.<nombreColeccion>.find()				## Muestra todos los datos de la Coleccion seleccionada.
+
+db.<nC>.find().pretty()					## Formato de busqueda más legible.
+
+db.<nC>.find({<dato que se busca>})		## Muestra todos los datos de la Coleccion que cumpla la condicion.
+
+db.<nC>.update(							## Actualiza un dato en específico.		
+	{dato que se quiere actualizar},	## Se busca el dato que se desea actualizar.
+	{datos actualizados})				## Se ingresan los datos actualizados, se deben escribir todos los datos.
+	
+db.<nC>.update(							## Actualiza un dato en específico.		
+	{dato},								## Se busca el dato que se desea actualizar.
+	{$set: {dato: valor}})				## Agrega un dato, para evitar modificar todo.
+-------------------------------
+	{$inc: {dato: aumento}})			## Incrementa un dato. Poner en negativo para reducir.
+-------------------------------	
+	{$unset: {dato: 1}})				## Elimina un dato. El 1 = true.
+-------------------------------
+	{$rename: {"dato": "nuevoNombre"}})	## Renombra un dato.
+
+db.<nC>.update(							## Actualiza un dato en específico.		
+	{dato que se quiere actualizar},	## Se busca el dato que se desea actualizar.
+	{datos actualizados},				## Se ingresan los datos actualizados, se deben escribir todos los datos.
+	{upsert: true})						## Si intenta actualizar un dato que no existe, lo agrega.
+
+db.<nC>.remove(							## Elimina un dato.
+	{dato: valor}						## Dato a eliminar.
+	,{justOne: true})					## Opcional, para eliminar el primer dato que cumpla la condicion.
+
+db.<nC>.find({$or:[						## Buscar con or.
+ {dato: valor},{dato: valor}]})			## Datos a buscar.
+
+db.<nC>.find({dato: {$lt: valor}})		## Busca datos con un valor MENOR al indicado.
+
+db.<nC>.find({dato: {$gt: valor}})		## Busca datos con un valor MAYOR al indicado.
+
+db.<nC>.find({dato: {$gt: valor, $lt: valor}})		## Busca datos con un valor entre los indicados.
+
+db.<nC>.drop();							## Elimina la coleccion.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+## Para agregar un dato a la BD:
+
+BasicDBObject <nombre> = new BasicDBObject();		## Se crea un BasicDBObject, que guardará los datos que se insertarán.
+<nombre>.put("<nombreDato>", "<valor>");			## Por cada dato que se vaya a agregar se hace un put.
+<tabla>.insert(<nombre>);							## Inserta en la coleccion el BasicDBObject.
+
+## Para obtener datos de la BDC:
+
+DBCursor <cursor> = <tabla>.find();					## Crea un cursor que guardará los resultados del find.
+while(<cursor>.hasNext()){							## Verifica que no esté vacío.
+	cursor.next();									## Obtiene el contenido del cursor.
+}
+
+
+
+
